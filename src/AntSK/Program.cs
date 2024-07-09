@@ -32,7 +32,12 @@ builder.Services.AddControllers().AddJsonOptions(config =>
     config.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
     config.JsonSerializerOptions.Converters.Add(new DateTimeNullableConvert());
 });
+builder.Configuration.AddJsonFile(Path.Combine(AppContext.BaseDirectory, "Config", "appsettings.json"));
 
+#if DEBUG
+builder.Configuration.AddJsonFile(Path.Combine(AppContext.BaseDirectory, "Config", $"appsettings.{builder.Environment.EnvironmentName}.json"));
+#endif
+builder.WebHost.UseUrls(builder.Configuration["urls"]!);
 builder.AddServiceDefaults();
 
 builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();

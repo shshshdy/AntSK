@@ -14,6 +14,7 @@ qwen2:72b
 qwen:0.5b
 qwen:1.8b
 qwen:4b
+qwen:4b-chat
 qwen:7b
 qwen:14b
 qwen:32b

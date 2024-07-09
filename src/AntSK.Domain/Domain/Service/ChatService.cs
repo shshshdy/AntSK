@@ -1,4 +1,5 @@
-﻿using AntSK.Domain.Common.DependencyInjection;
+﻿using Amazon.Runtime.Internal.Util;
+using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Constant;
@@ -204,11 +205,21 @@ namespace AntSK.Domain.Domain.Service
 
                     var chatResult = _kernel.InvokeStreamingAsync(function: func,
                         arguments: new KernelArguments() { ["doc"] = dataMsg.ToString(), ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["input"] = questions });
+                    try
+                    {
+                        var s = await chatResult.ToListAsync();
+
+                    } catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
 
                     await foreach (var content in chatResult)
                     {
                         yield return content;
                     }
+
                 }
                 else
                 {
